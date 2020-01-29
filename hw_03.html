@@ -1,0 +1,197 @@
+<head>
+	<!-- Webpage Title -->
+	<title>금산인삼주 사세요~!</title>
+
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- JS -->		
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<link href="https://fonts.googleapis.com/css?family=Gaegu&display=swap" rel="stylesheet">
+	<style>
+
+		.wrap {
+			width: 600px;
+			margin: auto;
+			font-family: 'Gaegu', cursive;
+		}
+
+		.pic {
+			background-image: url('http://image.idus.com/image/files/2d131040358148c0b0eafc069ecec32f.jpg');
+			background-size: cover;
+			background-position: center;
+			border-radius: 10px;
+			width: 450px;
+			height: 300px;
+			margin: 30px 75px 30px 75px;
+			box-shadow: 5px 5px 5px gray;
+		}
+
+		.info {
+			width: 580px;
+			margin: 0 0 0 10px;
+		}
+
+		.order {
+			width: 300px;
+			margin: 20px 150px 50px 150px;
+			font-size: larger;
+		}
+
+	</style>
+
+	<script>
+
+		function check() {
+			let name_val = $('#name').val()
+			let qnty_val = $('#inputGroupSelect01').val()
+			let addr_val = $('#addr').val()
+			let cont_val = $('#cont').val()
+			let regExp = /(010)-([1-9]{1}[0-9]{3})-([0-9]{4})$/
+			if (name_val == ''){
+				alert('이름을 입력하세요')
+				$('#name').focus()
+			} else if (qnty_val == '--- 수량을 선택하세요 ---') {
+				alert('수량을 선택하세요')
+				$('#inputGroupSelect01').focus()
+			} else if (addr_val == '') {
+				alert('주소를 입력하세요')
+				$('#addr').focus()
+			} else if (cont_val == ''){
+				alert('연락처를 입력하세요')
+				$('#cont').focus()
+			} else if(regExp.test(cont_val) == false){
+				alert('전화번호를 010-0000-0000 형식으로 입력해주세요')
+				$('#cont').focus()
+			} else {
+				alert('주문 성공!')
+				$('#name').val('')
+				$('#inputGroupSelect01').val('--- 수량을 선택하세요 ---')
+				$('#addr').val('')
+				$('#cont').val('')
+			}
+		}
+
+		$(document).ready(function(){
+			listing();
+		});
+
+		function listing() {
+
+			$.ajax({
+
+				type: "GET",
+				url: 'http://spartacodingclub.shop/order',
+				data: {},
+
+				
+				success: function(response){
+					let orders = response['orders']
+					for (let i = 0; i < orders.length; i++) {
+						let name = orders[i]['name']
+						let count = orders[i]['count']
+						let addr = orders[i]['address']
+						let phone = orders[i]['phone']
+						
+						let temp_html = '<tr>\
+						<th scope="row">'+(i+1)+'</th>\
+						<td>'+name+'</td>\
+						<td>'+count+'병</td>\
+						<td>'+addr+'</td>\
+						<td>'+phone+'</td>\
+						</tr>'
+
+						$('#orderlist').append(temp_html)
+					}
+				}
+			})
+
+		}
+		
+	</script>
+
+</head>
+
+
+
+<body>
+	<div class="wrap">
+
+		<div class="pic">
+		</div>
+
+		<p>
+			<h1>금산인삼주<span style="font-size: 0.5em">가격: 29,160원 / 720ml</span> </h1>
+
+			<h4> 
+				<span style="font-weight: bold">금산의 고려인삼</span>으로 명인이 빚은 <span style="font-weight: bold">발효인삼주</span>&#x1F376; 
+			</h4>
+			<h5>
+				농약을 쓰지 않고 직접 재배하며 인삼의 약효가 가장 뛰어난 5년근 이상의 인삼을 분쇄하여 쌀과 누룩을 함께 저온발효시킨 전통주로서 세계 여러나라와 비견해도 손색이 없는 명주입니다 &#x1F606;&#x1F498; <br>
+			</h5>
+		</p>
+
+		<p>
+			<h1>주문하기</h1>
+
+			<div class="info">
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="basic-addon1">주문자 성함</span>
+					</div>
+					<input id="name" type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
+				</div>
+
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<label class="input-group-text" for="inputGroupSelect01">수량</label>
+					</div>
+					<select class="custom-select" id="inputGroupSelect01">
+						<option selected>--- 수량을 선택하세요 ---</option>
+						<option value="1">1병</option>
+						<option value="2">2병</option>
+						<option value="3">3병</option>
+					</select>
+				</div>
+
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="basic-addon1">주소</span>
+					</div>
+					<input id="addr" type="text" class="form-control" aria-describedby="basic-addon1">
+				</div>
+
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="basic-addon1">전화번호</span>
+					</div>
+					<input id="cont" type="text" class="form-control" aria-describedby="basic-addon1">
+				</div>
+			</div>
+		</p>
+
+		<button onclick="check()" type="button" class="btn btn-dark order">주문하기</button>
+
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">주문자</th>
+					<th scope="col">수량</th>
+					<th scope="col">주소</th>
+					<th scope="col">전화번호</th>
+				</tr>
+			</thead>
+			<tbody id="orderlist">
+			</tbody>
+		</table>
+
+	</div>
+</body>
